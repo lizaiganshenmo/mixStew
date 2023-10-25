@@ -3,8 +3,8 @@
 package main
 
 import (
-	router "api/cmd/api/biz/router"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	router "github.com/lizaiganshenmo/mixStew/cmd/api/biz/router"
 )
 
 // register registers all routers.

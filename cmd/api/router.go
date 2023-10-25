@@ -3,13 +3,16 @@
 package main
 
 import (
-	handler "api/cmd/api/biz/handler"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	handler "github.com/lizaiganshenmo/mixStew/cmd/api/biz/handler"
+	"github.com/lizaiganshenmo/mixStew/cmd/api/biz/middleware"
 )
 
 // customizeRegister registers customize routers.
 func customizedRegister(r *server.Hertz) {
 	r.GET("/ping", handler.Ping)
 
-	// your code ...
+	r.POST("/users/login", middleware.AuthMiddleware.LoginHandler)
+	r.POST("/users", handler.RegisterUser) // 根据realworld specs 定义路由
+
 }
