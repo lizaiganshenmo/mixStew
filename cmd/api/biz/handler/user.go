@@ -46,7 +46,6 @@ func RegisterUser(ctx context.Context, c *app.RequestContext) {
 func GetUser(ctx context.Context, c *app.RequestContext) {
 	var uid int64
 	t, ok := c.Get(constants.IdentityKey)
-	hlog.Warnf("start get constants.IdentityKey: %+v  ok: %t", t, ok)
 	if !ok {
 		SendResponse(c, errno.ParamErr, nil)
 		return
