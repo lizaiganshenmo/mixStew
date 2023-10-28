@@ -1208,9 +1208,11 @@ func (p *CreateUserResp) Field1DeepEqual(src *BaseResp) bool {
 }
 
 type UpdateUserReq struct {
-	Email string `thrift:"email,1" frugal:"1,default,string" json:"email"`
-	Bio   string `thrift:"bio,2" frugal:"2,default,string" json:"bio"`
-	Image string `thrift:"image,3" frugal:"3,default,string" json:"image"`
+	Email    string `thrift:"email,1" frugal:"1,default,string" json:"email"`
+	Bio      string `thrift:"bio,2" frugal:"2,default,string" json:"bio"`
+	Image    string `thrift:"image,3" frugal:"3,default,string" json:"image"`
+	Username string `thrift:"username,4" frugal:"4,default,string" json:"username"`
+	Password string `thrift:"password,5" frugal:"5,default,string" json:"password"`
 }
 
 func NewUpdateUserReq() *UpdateUserReq {
@@ -1232,6 +1234,14 @@ func (p *UpdateUserReq) GetBio() (v string) {
 func (p *UpdateUserReq) GetImage() (v string) {
 	return p.Image
 }
+
+func (p *UpdateUserReq) GetUsername() (v string) {
+	return p.Username
+}
+
+func (p *UpdateUserReq) GetPassword() (v string) {
+	return p.Password
+}
 func (p *UpdateUserReq) SetEmail(val string) {
 	p.Email = val
 }
@@ -1241,11 +1251,19 @@ func (p *UpdateUserReq) SetBio(val string) {
 func (p *UpdateUserReq) SetImage(val string) {
 	p.Image = val
 }
+func (p *UpdateUserReq) SetUsername(val string) {
+	p.Username = val
+}
+func (p *UpdateUserReq) SetPassword(val string) {
+	p.Password = val
+}
 
 var fieldIDToName_UpdateUserReq = map[int16]string{
 	1: "email",
 	2: "bio",
 	3: "image",
+	4: "username",
+	5: "password",
 }
 
 func (p *UpdateUserReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1290,6 +1308,26 @@ func (p *UpdateUserReq) Read(iprot thrift.TProtocol) (err error) {
 		case 3:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 5:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else {
@@ -1354,6 +1392,24 @@ func (p *UpdateUserReq) ReadField3(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *UpdateUserReq) ReadField4(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Username = v
+	}
+	return nil
+}
+
+func (p *UpdateUserReq) ReadField5(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Password = v
+	}
+	return nil
+}
+
 func (p *UpdateUserReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
 	if err = oprot.WriteStructBegin("UpdateUserReq"); err != nil {
@@ -1370,6 +1426,14 @@ func (p *UpdateUserReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 
@@ -1442,6 +1506,40 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
+func (p *UpdateUserReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("username", thrift.STRING, 4); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Username); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *UpdateUserReq) writeField5(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("password", thrift.STRING, 5); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Password); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
 func (p *UpdateUserReq) String() string {
 	if p == nil {
 		return "<nil>"
@@ -1464,6 +1562,12 @@ func (p *UpdateUserReq) DeepEqual(ano *UpdateUserReq) bool {
 	if !p.Field3DeepEqual(ano.Image) {
 		return false
 	}
+	if !p.Field4DeepEqual(ano.Username) {
+		return false
+	}
+	if !p.Field5DeepEqual(ano.Password) {
+		return false
+	}
 	return true
 }
 
@@ -1484,6 +1588,20 @@ func (p *UpdateUserReq) Field2DeepEqual(src string) bool {
 func (p *UpdateUserReq) Field3DeepEqual(src string) bool {
 
 	if strings.Compare(p.Image, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *UpdateUserReq) Field4DeepEqual(src string) bool {
+
+	if strings.Compare(p.Username, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *UpdateUserReq) Field5DeepEqual(src string) bool {
+
+	if strings.Compare(p.Password, src) != 0 {
 		return false
 	}
 	return true

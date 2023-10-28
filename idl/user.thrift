@@ -30,6 +30,8 @@ struct UpdateUserReq{
     1:string email
     2:string bio
     3:string image
+    4:string username
+    5:string password
 }
 
 struct UpdateUserResp{

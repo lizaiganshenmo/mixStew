@@ -65,3 +65,29 @@ func CheckUser(ctx context.Context, req *user.CheckUserReq) (int64, error) {
 	}
 	return resp.Uid, nil
 }
+
+// GetUser get user info
+func GetUser(ctx context.Context, req *user.GetUserReq) (*user.User, error) {
+	resp, err := userClient.GetUser(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.BaseResp.StatusCode != 0 {
+		return nil, errno.NewErrNo(resp.BaseResp.StatusCode, resp.BaseResp.StatusMessage)
+	}
+
+	return resp.User, nil
+}
+
+// update user info
+func UpdateUser(ctx context.Context, req *user.UpdateUserReq) error {
+	resp, err := userClient.UpdateUser(ctx, req)
+	if err != nil {
+		return err
+	}
+	if resp.BaseResp.StatusCode != 0 {
+		return errno.NewErrNo(resp.BaseResp.StatusCode, resp.BaseResp.StatusMessage)
+	}
+
+	return nil
+}

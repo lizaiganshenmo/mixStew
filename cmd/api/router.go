@@ -13,6 +13,8 @@ func customizedRegister(r *server.Hertz) {
 	r.GET("/ping", handler.Ping)
 
 	r.POST("/users/login", middleware.AuthMiddleware.LoginHandler)
-	r.POST("/users", handler.RegisterUser) // 根据realworld specs 定义路由
+	r.POST("/users", handler.RegisterUser)                                      // 根据realworld specs 定义路由
+	r.GET("/user", middleware.AuthMiddleware.MiddlewareFunc(), handler.GetUser) // 查询当前用户信息
+	r.PUT("/user", handler.UpdateUser)                                          // 更新用户信息
 
 }

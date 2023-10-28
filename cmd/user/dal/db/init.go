@@ -1,8 +1,6 @@
 package db
 
 import (
-	"fmt"
-
 	config "github.com/lizaiganshenmo/mixStew/cmd/user/configs"
 	"github.com/lizaiganshenmo/mixStew/library/constants"
 	"github.com/lizaiganshenmo/mixStew/library/utils"
@@ -29,7 +27,6 @@ func initSQL(srvName string) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("sql dsn is: %s\n", dsn)
 
 	MySQLMixStewDB, err = gorm.Open(mysql.Open(dsn),
 		&gorm.Config{

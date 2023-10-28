@@ -13,8 +13,17 @@ import (
 type UserServiceImpl struct{}
 
 // CheckUser implements user.UserService.
-func (*UserServiceImpl) CheckUser(ctx context.Context, req *user.CheckUserReq) (r *user.CheckUserResp, err error) {
-	panic("unimplemented")
+func (*UserServiceImpl) CheckUser(ctx context.Context, req *user.CheckUserReq) (resp *user.CheckUserResp, err error) {
+	resp = new(user.CheckUserResp)
+
+	uid, err := service.NewUserService(ctx).CheckUser(req)
+	if err != nil {
+		resp.BaseResp = pack.BuildBaseResp(err)
+	}
+
+	resp.BaseResp = pack.BuildBaseResp(errno.Success)
+	resp.Uid = uid
+	return resp, nil
 }
 
 // CreateUser implements the UserServiceImpl interface.
@@ -37,12 +46,38 @@ func (s *UserServiceImpl) CreateUser(ctx context.Context, req *user.CreateUserRe
 
 // GetUser implements the UserServiceImpl interface.
 func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserReq) (resp *user.GetUserResp, err error) {
-	// TODO: Your code here...
-	return
+	resp = new(user.GetUserResp)
+
+	if req.Uid == 0 {
+		resp.BaseResp = pack.BuildBaseResp(errno.ParamErr)
+		return resp, nil
+	}
+
+	user, err := service.NewUserService(ctx).GetUser(req)
+	if err != nil {
+		resp.BaseResp = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	resp.BaseResp = pack.BuildBaseResp(errno.Success)
+	resp.User = pack.User(user)
+	return resp, nil
 }
 
 // UpdateUser implements the UserServiceImpl interface.
 func (s *UserServiceImpl) UpdateUser(ctx context.Context, req *user.UpdateUserReq) (resp *user.UpdateUserResp, err error) {
-	// TODO: Your code here...
+	resp = new(user.UpdateUserResp)
+	if len(req.Email) == 0 {
+		resp.BaseResp = pack.BuildBaseResp(errno.ParamErr)
+		return resp, nil
+	}
+
+	err = service.NewUserService(ctx).UpdateUser(req)
+	if err != nil {
+		resp.BaseResp = pack.BuildBaseResp(err)
+		return resp, nil
+	}
+
+	resp.BaseResp = pack.BuildBaseResp(errno.Success)
 	return
 }

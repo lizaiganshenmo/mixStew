@@ -13,7 +13,7 @@ func User(u *db.User) *user.User {
 
 	return &user.User{
 		UserRegister: &user.CreateUserReq{
-			UserAuth: &user.UserAuth{Email: u.Email, Password: u.Password},
+			UserAuth: &user.UserAuth{Email: u.Email},
 			Username: u.UserName,
 		},
 		Bio:   u.Bio,

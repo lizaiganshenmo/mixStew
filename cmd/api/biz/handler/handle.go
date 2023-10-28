@@ -1,6 +1,9 @@
 package handler
 
 import (
+	"regexp"
+	"sync"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	validator "github.com/go-playground/validator/v10"
@@ -8,7 +11,8 @@ import (
 )
 
 var (
-	vld = validator.New()
+	vld             = validator.New()
+	valRegisterOnce sync.Once
 )
 
 type Response struct {
@@ -28,9 +32,22 @@ func SendResponse(c *app.RequestContext, err error, data interface{}) {
 }
 
 // valdate req is valid
-func ValidateFunc(c *app.RequestContext, req interface{}) {
+func ValidateFunc(c *app.RequestContext, req interface{}) error {
+	valRegisterOnce.Do(func() {
+		vld.RegisterValidation("regexEmail", validateEmail)
+	})
 	err := vld.Struct(req)
 	if err != nil {
-		SendResponse(c, errno.ParamErr, nil)
+		// SendResponse(c, errno.ParamErr, nil)
+		return err
 	}
+
+	return nil
+}
+
+// validate email is valid
+func validateEmail(fl validator.FieldLevel) bool {
+	pattern := `^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$`
+	match, _ := regexp.MatchString(pattern, fl.Field().String())
+	return match
 }

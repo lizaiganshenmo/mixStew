@@ -37,3 +37,19 @@ func QueryUser(ctx context.Context, email string) ([]*User, error) {
 	}
 	return res, nil
 }
+
+// query user info by uid
+func QueryUserByUid(ctx context.Context, uid int64) ([]*User, error) {
+	res := make([]*User, 0)
+	if err := MySQLMixStewDB.WithContext(ctx).Where("uid = ?", uid).Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func UpdateUser(ctx context.Context, user *User) error {
+	if err := MySQLMixStewDB.WithContext(ctx).Model(&User{}).Where("email = ?", user.Email).Updates(user).Error; err != nil {
+		return err
+	}
+	return nil
+}

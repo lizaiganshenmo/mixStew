@@ -18,9 +18,10 @@ var AuthMiddleware *jwt.HertzJWTMiddleware
 
 func init() {
 	AuthMiddleware, _ = jwt.New(&jwt.HertzJWTMiddleware{
-		Key:        []byte(constants.SecretKey),
-		Timeout:    time.Hour,
-		MaxRefresh: time.Hour,
+		Key:         []byte(constants.SecretKey),
+		Timeout:     time.Hour,
+		MaxRefresh:  time.Hour,
+		IdentityKey: constants.IdentityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(int64); ok {
 				return jwt.MapClaims{
