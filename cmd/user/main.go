@@ -47,7 +47,7 @@ func main() {
 		panic(err)
 	}
 
-	addr, err := net.ResolveTCPAddr("tcp", constants.ListenADD)
+	addr, err := net.ResolveTCPAddr("tcp", constants.UserServiceListenADD)
 
 	svr := userservice.NewServer(
 		new(UserServiceImpl),

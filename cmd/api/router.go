@@ -17,4 +17,10 @@ func customizedRegister(r *server.Hertz) {
 	r.GET("/user", middleware.AuthMiddleware.MiddlewareFunc(), handler.GetUser) // 查询当前用户信息
 	r.PUT("/user", handler.UpdateUser)                                          // 更新用户信息
 
+	// follow
+	profileGroup := r.Group("/profiles", middleware.AuthMiddleware.MiddlewareFunc())
+	profileGroup.POST("/:follow_uid/follow", handler.Follow)
+	profileGroup.DELETE("/:follow_uid/follow", handler.UnFollow)
+	profileGroup.GET("/:follow_uid", handler.GetProfile)
+
 }

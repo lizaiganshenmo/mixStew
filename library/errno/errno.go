@@ -12,6 +12,9 @@ const (
 	UserAlreadyExistErrCode    = 10003
 	AuthorizationFailedErrCode = 10004
 	UserNotExistErrCode        = 10005
+
+	// follow
+	FollowYourselfErrorCode = 10006
 )
 
 type ErrNo struct {
@@ -39,6 +42,9 @@ var (
 	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User already exists")
 	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
 	UserNotExistErr        = NewErrNo(UserNotExistErrCode, "user not exit")
+
+	// follow
+	FollowYourselfError = NewErrNo(FollowYourselfErrorCode, "can not follow yourself")
 )
 
 // ConvertErr convert error to Errno

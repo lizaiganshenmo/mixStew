@@ -10,6 +10,7 @@ require (
 	github.com/hertz-contrib/jwt v1.0.2
 	github.com/kitex-contrib/registry-etcd v0.2.0
 	github.com/mitchellh/mapstructure v1.5.0
+	github.com/spf13/cast v1.5.1
 	github.com/spf13/viper v1.17.0
 	gorm.io/driver/mysql v1.5.2
 	gorm.io/gorm v1.25.5
@@ -94,7 +95,6 @@ require (
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.10.0 // indirect
-	github.com/spf13/cast v1.5.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect

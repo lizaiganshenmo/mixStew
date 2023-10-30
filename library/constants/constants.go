@@ -11,13 +11,16 @@ const (
 	SnowflakeDatacenterID = 0
 
 	// etcd add
-	EtcdAdd = "47.93.215.110:2379"
+	EtcdAdd = "123.56.67.72:2379"
 
 	// Service
 	UserServiceName = "userService"
 	// listenADD
-	ListenADD = "127.0.0.1:8001"
+	UserServiceListenADD = "127.0.0.1:8001"
 	// service limit
 	MaxConnections = 1000
 	MaxQPS         = 100
+
+	FollowServiceName      = "followService"
+	FollowServiceListenADD = "127.0.0.1:8002"
 )
