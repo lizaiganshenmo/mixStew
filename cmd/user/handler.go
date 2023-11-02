@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/lizaiganshenmo/mixStew/cmd/user/pack"
 	"github.com/lizaiganshenmo/mixStew/cmd/user/service"
 	"github.com/lizaiganshenmo/mixStew/kitex_gen/user"
@@ -18,6 +19,7 @@ func (*UserServiceImpl) CheckUser(ctx context.Context, req *user.CheckUserReq) (
 
 	uid, err := service.NewUserService(ctx).CheckUser(req)
 	if err != nil {
+		klog.Warnf("user.CheckUser fail. err : %+v, req: %+v", err, req)
 		resp.BaseResp = pack.BuildBaseResp(err)
 	}
 
@@ -38,6 +40,7 @@ func (s *UserServiceImpl) CreateUser(ctx context.Context, req *user.CreateUserRe
 	err = service.NewUserService(ctx).CreateUser(req)
 	if err != nil {
 		resp.BaseResp = pack.BuildBaseResp(err)
+		klog.Warnf("user.CreateUser fail. err : %+v, req: %+v", err, req)
 		return resp, nil
 	}
 	resp.BaseResp = pack.BuildBaseResp(errno.Success)
@@ -56,6 +59,7 @@ func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserReq) (re
 	user, err := service.NewUserService(ctx).GetUser(req)
 	if err != nil {
 		resp.BaseResp = pack.BuildBaseResp(err)
+		klog.Warnf("user.GetUser fail. err : %+v, req: %+v", err, req)
 		return resp, nil
 	}
 
@@ -75,6 +79,7 @@ func (s *UserServiceImpl) UpdateUser(ctx context.Context, req *user.UpdateUserRe
 	err = service.NewUserService(ctx).UpdateUser(req)
 	if err != nil {
 		resp.BaseResp = pack.BuildBaseResp(err)
+		klog.Warnf("user.UpdateUser fail. err : %+v, req: %+v", err, req)
 		return resp, nil
 	}
 

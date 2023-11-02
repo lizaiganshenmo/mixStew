@@ -3,28 +3,19 @@
 package main
 
 import (
-	"os"
-
 	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/lizaiganshenmo/mixStew/cmd/api/biz/rpc"
+	config "github.com/lizaiganshenmo/mixStew/cmd/api/configs"
+	"github.com/lizaiganshenmo/mixStew/cmd/api/resource"
 )
 
 func Init() {
+	// conf init
+	config.Init()
 	// rpc init
 	rpc.Init()
-	// log init
-	logInit()
-}
-
-func logInit() {
-	f, err := os.OpenFile("./output.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		panic(err)
-	}
-	// defer f.Close()
-
-	hlog.SetOutput(f)
+	// resource 全局变量初始化 包含log
+	resource.Init()
 }
 
 func main() {

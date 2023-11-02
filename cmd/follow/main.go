@@ -2,37 +2,26 @@ package main
 
 import (
 	"net"
-	"os"
 
-	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	config "github.com/lizaiganshenmo/mixStew/cmd/follow/configs"
 	"github.com/lizaiganshenmo/mixStew/cmd/follow/dal"
+	"github.com/lizaiganshenmo/mixStew/cmd/follow/resource"
 	"github.com/lizaiganshenmo/mixStew/kitex_gen/follow/followservice"
 	"github.com/lizaiganshenmo/mixStew/library/constants"
 	"github.com/lizaiganshenmo/mixStew/library/middleware"
 )
 
 func Init() {
-	// 配置信息加载
+	// 配置信息加载-应当在首位顺序
 	config.Init()
 	// dal 初始化
 	dal.Init()
-	// log init
-	logInit()
-
-}
-
-func logInit() {
-	f, err := os.OpenFile("./output.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		panic(err)
-	}
-	// defer f.Close()
-	klog.SetOutput(f)
+	// resource 初始化 全局变量初始化 包括 log
+	resource.Init()
 
 }
 

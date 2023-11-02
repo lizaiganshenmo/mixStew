@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/lizaiganshenmo/mixStew/cmd/follow/pack"
 	"github.com/lizaiganshenmo/mixStew/cmd/follow/service"
 	follow "github.com/lizaiganshenmo/mixStew/kitex_gen/follow"
@@ -23,6 +24,7 @@ func (s *FollowServiceImpl) Follow(ctx context.Context, req *follow.FollowReq) (
 	err = service.NewFollowService(ctx).Follow(req)
 	if err != nil {
 		resp.BaseResp = pack.BuildBaseResp(err)
+		klog.Warnf("follow.Follow fail. err : %+v, req: %+v", err, req)
 		return
 	}
 
@@ -41,6 +43,7 @@ func (s *FollowServiceImpl) UnFollow(ctx context.Context, req *follow.FollowReq)
 	err = service.NewFollowService(ctx).Unfollow(req)
 	if err != nil {
 		resp.BaseResp = pack.BuildBaseResp(err)
+		klog.Warnf("follow.UnFollow fail. err : %+v, req: %+v", err, req)
 		return
 	}
 
@@ -59,6 +62,7 @@ func (s *FollowServiceImpl) IsFollow(ctx context.Context, req *follow.FollowReq)
 	isFollow, err := service.NewFollowService(ctx).IsFollow(req)
 	if err != nil {
 		resp.BaseResp = pack.BuildBaseResp(err)
+		klog.Warnf("follow.IsFollow fail. err : %+v, req: %+v", err, req)
 		return
 	}
 
@@ -78,6 +82,7 @@ func (s *FollowServiceImpl) FollowList(ctx context.Context, req *follow.FollowLi
 	uids, err := service.NewFollowService(ctx).FollowList(req)
 	if err != nil {
 		resp.BaseResp = pack.BuildBaseResp(err)
+		klog.Warnf("follow.FollowList fail. err : %+v, req: %+v", err, req)
 		return resp, nil
 	}
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/loadbalance"
 	"github.com/cloudwego/kitex/pkg/retry"
@@ -29,7 +30,7 @@ func InitUserRPC() {
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithMuxConnection(1),                       // mux
 		client.WithRPCTimeout(3*time.Second),              // rpc timeout
-		client.WithConnectTimeout(500*time.Millisecond),   // conn timeout
+		client.WithConnectTimeout(50*time.Millisecond),    // conn timeout
 		client.WithFailureRetry(retry.NewFailurePolicy()), // retry
 		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
 		client.WithResolver(r), // resolver
@@ -58,6 +59,7 @@ func CreateUser(ctx context.Context, req *user.CreateUserReq) error {
 func CheckUser(ctx context.Context, req *user.CheckUserReq) (int64, error) {
 	resp, err := userClient.CheckUser(ctx, req)
 	if err != nil {
+		hlog.Warnf("rpc.CheckUser fail. err:%+v", err)
 		return 0, err
 	}
 	if resp.BaseResp.StatusCode != 0 {
