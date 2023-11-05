@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/lizaiganshenmo/mixStew/cmd/user/pack"
 	"github.com/lizaiganshenmo/mixStew/cmd/user/service"
 	"github.com/lizaiganshenmo/mixStew/kitex_gen/user"
+	"github.com/lizaiganshenmo/mixStew/library/constants"
 	"github.com/lizaiganshenmo/mixStew/library/errno"
 )
 
@@ -19,8 +21,9 @@ func (*UserServiceImpl) CheckUser(ctx context.Context, req *user.CheckUserReq) (
 
 	uid, err := service.NewUserService(ctx).CheckUser(req)
 	if err != nil {
-		klog.Warnf("user.CheckUser fail. err : %+v, req: %+v", err, req)
+		klog.CtxWarnf(ctx, "user.CheckUser fail. err : %+v, req: %+v", err, req)
 		resp.BaseResp = pack.BuildBaseResp(err)
+		return resp, nil
 	}
 
 	resp.BaseResp = pack.BuildBaseResp(errno.Success)
@@ -40,7 +43,7 @@ func (s *UserServiceImpl) CreateUser(ctx context.Context, req *user.CreateUserRe
 	err = service.NewUserService(ctx).CreateUser(req)
 	if err != nil {
 		resp.BaseResp = pack.BuildBaseResp(err)
-		klog.Warnf("user.CreateUser fail. err : %+v, req: %+v", err, req)
+		klog.CtxWarnf(ctx, "user.CreateUser fail. err : %+v, req: %+v", err, req)
 		return resp, nil
 	}
 	resp.BaseResp = pack.BuildBaseResp(errno.Success)
@@ -57,9 +60,11 @@ func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserReq) (re
 	}
 
 	user, err := service.NewUserService(ctx).GetUser(req)
+	fmt.Printf("ctx kv is: %s: %v\n", constants.RequestIdKey, ctx.Value(constants.RequestIdKey))
+
 	if err != nil {
 		resp.BaseResp = pack.BuildBaseResp(err)
-		klog.Warnf("user.GetUser fail. err : %+v, req: %+v", err, req)
+		klog.CtxWarnf(ctx, "user.GetUser fail. err : %+v, req: %+v", err, req)
 		return resp, nil
 	}
 
@@ -79,7 +84,7 @@ func (s *UserServiceImpl) UpdateUser(ctx context.Context, req *user.UpdateUserRe
 	err = service.NewUserService(ctx).UpdateUser(req)
 	if err != nil {
 		resp.BaseResp = pack.BuildBaseResp(err)
-		klog.Warnf("user.UpdateUser fail. err : %+v, req: %+v", err, req)
+		klog.CtxWarnf(ctx, "user.UpdateUser fail. err : %+v, req: %+v", err, req)
 		return resp, nil
 	}
 

@@ -4,12 +4,20 @@ package main
 
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/hertz-contrib/requestid"
 	handler "github.com/lizaiganshenmo/mixStew/cmd/api/biz/handler"
 	"github.com/lizaiganshenmo/mixStew/cmd/api/biz/middleware"
+	"github.com/lizaiganshenmo/mixStew/library/constants"
 )
 
 // customizeRegister registers customize routers.
 func customizedRegister(r *server.Hertz) {
+	// gen request_id for log
+	r.Use(requestid.New(
+		requestid.WithCustomHeaderStrKey(constants.RequestIdKey),
+	))
+	r.Use(middleware.AddMetaInfo()) // add meta info for trans
+
 	r.GET("/ping", handler.Ping)
 
 	r.POST("/users/login", middleware.AuthMiddleware.LoginHandler)

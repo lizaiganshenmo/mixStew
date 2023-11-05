@@ -6,6 +6,13 @@ const (
 	IdentityKey   = "uid"
 	TokenHeadName = "Token"
 
+	// request id key
+	RequestIdKey = "log_id"
+
+	// jaeger collector add  -> accept OpenTelemetry Protocol (OTLP) over gRPC
+	JaegerColAdd = "127.0.0.1:4317"
+	JaegerAdd    = "127.0.0.1:6831"
+
 	// snowflake
 	SnowflakeWorkerID     = 0
 	SnowflakeDatacenterID = 0

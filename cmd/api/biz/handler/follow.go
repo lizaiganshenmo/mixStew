@@ -35,7 +35,7 @@ func Follow(ctx context.Context, c *app.RequestContext) {
 	err := rpc.Follow(ctx, &follow.FollowReq{Uid: uid, FollowUid: followUid})
 	if err != nil {
 		SendResponse(c, err, nil)
-		hlog.Warnf("rpc.Follow err : %v , uid: %d, follow_uid: %d", err, uid, followUid)
+		hlog.CtxWarnf(ctx, "rpc.Follow err : %v , uid: %d, follow_uid: %d", err, uid, followUid)
 		return
 	}
 
@@ -63,7 +63,7 @@ func UnFollow(ctx context.Context, c *app.RequestContext) {
 	err := rpc.UnFollow(ctx, &follow.FollowReq{Uid: uid, FollowUid: followUid})
 	if err != nil {
 		SendResponse(c, err, nil)
-		hlog.Warnf("rpc.UnFollow err : %v , uid: %d, follow_uid: %d", err, uid, followUid)
+		hlog.CtxWarnf(ctx, "rpc.UnFollow err : %v , uid: %d, follow_uid: %d", err, uid, followUid)
 		return
 	}
 
@@ -74,7 +74,6 @@ func UnFollow(ctx context.Context, c *app.RequestContext) {
 func GetProfile(ctx context.Context, c *app.RequestContext) {
 	var uid int64
 	t, ok := c.Get(constants.IdentityKey)
-	// hlog.Warnf("uid ok : %+v, %t", t, ok)
 	if !ok {
 		SendResponse(c, errno.ParamErr, nil)
 		return
@@ -83,7 +82,6 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 	uid = int64(t.(float64))
 	followUidStr := c.Param("follow_uid")
 	followUid := cast.ToInt64(followUidStr)
-	// hlog.Warnf("followUid : %d", followUid)
 	if followUid == 0 {
 		SendResponse(c, errno.ParamErr, nil)
 		return
@@ -108,8 +106,8 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 	}()
 
 	wg.Wait()
-	// hlog.Warnf("user1, err1 : %+v, %+v", user1, err1)
-	// hlog.Warnf("isFollowing, err2 : %+v, %+v", isFollowing, err2)
+	// hlog.CtxWarnf("user1, err1 : %+v, %+v", user1, err1)
+	// hlog.CtxWarnf("isFollowing, err2 : %+v, %+v", isFollowing, err2)
 
 	data := &resp.Profile{}
 	if err1 == nil {
@@ -117,11 +115,13 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 		data.Bio = user1.Bio
 		data.Image = user1.Image
 	} else {
-		hlog.Warnf("rpc.GetUser err: %+v", err1)
+		hlog.CtxWarnf(ctx, "rpc.GetUser err: %+v", err1)
+		SendResponse(c, err1, data)
+		return
 	}
 
 	if err2 != nil {
-		hlog.Warnf("rpc.IsFollow err: %+v", err2)
+		hlog.CtxWarnf(ctx, "rpc.IsFollow err: %+v", err2)
 	} else {
 		data.Following = isFollowing
 	}

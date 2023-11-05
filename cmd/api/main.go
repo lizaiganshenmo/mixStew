@@ -3,25 +3,40 @@
 package main
 
 import (
+	"context"
+
 	"github.com/cloudwego/hertz/pkg/app/server"
+	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
+	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/lizaiganshenmo/mixStew/cmd/api/biz/rpc"
 	config "github.com/lizaiganshenmo/mixStew/cmd/api/configs"
 	"github.com/lizaiganshenmo/mixStew/cmd/api/resource"
+	"github.com/lizaiganshenmo/mixStew/library/constants"
 )
 
 func Init() {
 	// conf init
 	config.Init()
-	// rpc init
-	rpc.Init()
 	// resource 全局变量初始化 包含log
 	resource.Init()
+	// rpc init
+	rpc.Init()
 }
 
 func main() {
 	Init()
 
-	h := server.Default()
+	p := provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(constants.MixStewServiceName),
+		provider.WithExportEndpoint(constants.JaegerColAdd),
+		provider.WithInsecure(),
+		provider.WithEnableMetrics(false),
+	)
+	defer p.Shutdown(context.Background())
+
+	tracer, cfg := hertztracing.NewServerTracer()
+	h := server.Default(tracer)
+	h.Use(hertztracing.ServerMiddleware(cfg))
 
 	register(h)
 	h.Spin()

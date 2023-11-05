@@ -1,11 +1,14 @@
 package main
 
 import (
+	"context"
 	"net"
 
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/kitex-contrib/obs-opentelemetry/provider"
+	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	config "github.com/lizaiganshenmo/mixStew/cmd/follow/configs"
 	"github.com/lizaiganshenmo/mixStew/cmd/follow/dal"
@@ -33,6 +36,15 @@ func main() {
 		panic(err)
 	}
 
+	// add tracer
+	p := provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(constants.FollowServiceName),
+		provider.WithExportEndpoint(constants.JaegerColAdd),
+		provider.WithInsecure(),
+		provider.WithEnableMetrics(false),
+	)
+	defer p.Shutdown(context.Background())
+
 	addr, err := net.ResolveTCPAddr("tcp", constants.FollowServiceListenADD)
 
 	svr := followservice.NewServer(
@@ -46,6 +58,7 @@ func main() {
 		server.WithServiceAddr(addr),
 		server.WithRegistry(r),
 		server.WithLimit(&limit.Option{MaxConnections: constants.MaxConnections, MaxQPS: constants.MaxQPS}),
+		server.WithSuite(tracing.NewServerSuite()), // tracer
 	)
 	if err := svr.Run(); err != nil {
 		panic(err)

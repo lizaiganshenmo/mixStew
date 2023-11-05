@@ -7,6 +7,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	validator "github.com/go-playground/validator/v10"
+	"github.com/hertz-contrib/requestid"
 	"github.com/lizaiganshenmo/mixStew/library/errno"
 )
 
@@ -18,6 +19,7 @@ var (
 type Response struct {
 	Code    int64       `json:"code"`
 	Message string      `json:"message"`
+	LogId   string      `json:"log_id"`
 	Data    interface{} `json:"data"`
 }
 
@@ -27,6 +29,7 @@ func SendResponse(c *app.RequestContext, err error, data interface{}) {
 	c.JSON(consts.StatusOK, Response{
 		Code:    Err.ErrCode,
 		Message: Err.ErrMsg,
+		LogId:   requestid.Get(c),
 		Data:    data,
 	})
 }

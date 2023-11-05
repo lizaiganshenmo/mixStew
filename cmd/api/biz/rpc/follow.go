@@ -7,6 +7,7 @@ import (
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/loadbalance"
 	"github.com/cloudwego/kitex/pkg/retry"
+	kitextracing "github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"github.com/lizaiganshenmo/mixStew/kitex_gen/follow"
 	"github.com/lizaiganshenmo/mixStew/kitex_gen/follow/followservice"
@@ -31,8 +32,8 @@ func InitFollowRPC() {
 		client.WithRPCTimeout(3*time.Second),              // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond),    // conn timeout
 		client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
-		client.WithResolver(r), // resolver
+		client.WithSuite(kitextracing.NewClientSuite()),   // tracer
+		client.WithResolver(r),                            // resolver
 		client.WithLoadBalancer(loadbalance.NewWeightedRoundRobinBalancer()),
 	)
 	if err != nil {

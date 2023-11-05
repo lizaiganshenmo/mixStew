@@ -8,6 +8,7 @@ import (
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/loadbalance"
 	"github.com/cloudwego/kitex/pkg/retry"
+	kitextracing "github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"github.com/lizaiganshenmo/mixStew/kitex_gen/user"
 	"github.com/lizaiganshenmo/mixStew/kitex_gen/user/userservice"
@@ -32,8 +33,8 @@ func InitUserRPC() {
 		client.WithRPCTimeout(3*time.Second),              // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond),    // conn timeout
 		client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
-		client.WithResolver(r), // resolver
+		client.WithSuite(kitextracing.NewClientSuite()),   // tracer
+		client.WithResolver(r),                            // resolver
 		client.WithLoadBalancer(loadbalance.NewWeightedRoundRobinBalancer()),
 	)
 	if err != nil {
@@ -59,7 +60,7 @@ func CreateUser(ctx context.Context, req *user.CreateUserReq) error {
 func CheckUser(ctx context.Context, req *user.CheckUserReq) (int64, error) {
 	resp, err := userClient.CheckUser(ctx, req)
 	if err != nil {
-		hlog.Warnf("rpc.CheckUser fail. err:%+v", err)
+		hlog.CtxWarnf(ctx, "rpc.CheckUser fail. err:%+v", err)
 		return 0, err
 	}
 	if resp.BaseResp.StatusCode != 0 {
@@ -72,6 +73,7 @@ func CheckUser(ctx context.Context, req *user.CheckUserReq) (int64, error) {
 func GetUser(ctx context.Context, req *user.GetUserReq) (*user.User, error) {
 	resp, err := userClient.GetUser(ctx, req)
 	if err != nil {
+		hlog.CtxWarnf(ctx, "rpc.GetUser fail. err:%+v", err)
 		return nil, err
 	}
 	if resp.BaseResp.StatusCode != 0 {

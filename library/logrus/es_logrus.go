@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/bytedance/gopkg/cloud/metainfo"
+	"github.com/lizaiganshenmo/mixStew/library/constants"
 	"github.com/olivere/elastic/v7"
 	"github.com/sirupsen/logrus"
 )
@@ -83,6 +85,12 @@ func createMessage(entry *logrus.Entry, hook *ElasticHook) *message {
 		}
 	}
 
+	// add request_id to log data
+	logid, ok := metainfo.GetPersistentValue(entry.Context, constants.RequestIdKey)
+	if ok {
+		entry.Data[constants.RequestIdKey] = logid
+	}
+
 	return &message{
 		hook.host,
 		entry.Time.UTC().Format(time.RFC3339Nano),
@@ -97,26 +105,16 @@ func syncFireFunc(entry *logrus.Entry, hook *ElasticHook) error {
 	bulkReq := hook.client.Bulk()
 
 	data := createMessage(entry, hook)
-	fmt.Printf("log data is: %+v\n", data)
-	fmt.Printf("hook is: %+v\n", hook)
-	fmt.Printf("hook。index is: %+v\n", hook.index())
 	doc := elastic.NewBulkIndexRequest().
 		Index(hook.index()).Doc(&data)
 
 	bulkReq.Add(doc)
 
-	resp, err := bulkReq.Do(hook.ctx)
+	_, err := bulkReq.Do(hook.ctx)
 	if err != nil {
 		fmt.Printf("Error send log info to es .err: %s\n", err)
 	}
-	for _, v := range resp.Items {
-		for k, val := range v {
-			fmt.Printf("resp send log info map is: %+v  val:%+v\n", k, val)
-			fmt.Printf("val.error: %+v\n", val.Error)
-		}
 
-	}
-	fmt.Printf("resp send log info to es is: %+v\n", resp)
 	return err
 }
 

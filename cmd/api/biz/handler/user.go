@@ -36,7 +36,7 @@ func RegisterUser(ctx context.Context, c *app.RequestContext) {
 
 	if err != nil {
 		SendResponse(c, err, nil)
-		hlog.Warnf("rpc.CreateUser err: %+v", err)
+		hlog.CtxWarnf(ctx, "rpc.CreateUser err: %+v", err)
 		return
 	}
 
@@ -55,7 +55,7 @@ func GetUser(ctx context.Context, c *app.RequestContext) {
 	user, err := rpc.GetUser(ctx, &user.GetUserReq{Uid: uid})
 	if err != nil {
 		SendResponse(c, err, nil)
-		hlog.Warnf("rpc.GetUser err: %+v", err)
+		hlog.CtxWarnf(ctx, "rpc.GetUser err: %+v", err)
 		return
 	}
 
@@ -84,7 +84,7 @@ func UpdateUser(ctx context.Context, c *app.RequestContext) {
 	})
 	if err != nil {
 		SendResponse(c, err, nil)
-		hlog.Warnf("rpc.UpdateUser err: %+v", err)
+		hlog.CtxWarnf(ctx, "rpc.UpdateUser err: %+v", err)
 		return
 	}
 
