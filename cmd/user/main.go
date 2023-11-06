@@ -38,7 +38,7 @@ func main() {
 
 	// add tracer
 	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(constants.FollowServiceName),
+		provider.WithServiceName(constants.UserServiceName),
 		provider.WithExportEndpoint(constants.JaegerColAdd),
 		provider.WithInsecure(),
 		provider.WithEnableMetrics(false),

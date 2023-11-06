@@ -2,13 +2,11 @@ package main
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/lizaiganshenmo/mixStew/cmd/user/pack"
 	"github.com/lizaiganshenmo/mixStew/cmd/user/service"
 	"github.com/lizaiganshenmo/mixStew/kitex_gen/user"
-	"github.com/lizaiganshenmo/mixStew/library/constants"
 	"github.com/lizaiganshenmo/mixStew/library/errno"
 )
 
@@ -52,6 +50,10 @@ func (s *UserServiceImpl) CreateUser(ctx context.Context, req *user.CreateUserRe
 
 // GetUser implements the UserServiceImpl interface.
 func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserReq) (resp *user.GetUserResp, err error) {
+	// tr := otel.Tracer("")
+	// _, span := tr.Start(ctx, "GetUser-handler")
+	// span.SetAttributes(attribute.String("uid", cast.ToString(req.Uid)))
+	// defer span.End()
 	resp = new(user.GetUserResp)
 
 	if req.Uid == 0 {
@@ -60,7 +62,6 @@ func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserReq) (re
 	}
 
 	user, err := service.NewUserService(ctx).GetUser(req)
-	fmt.Printf("ctx kv is: %s: %v\n", constants.RequestIdKey, ctx.Value(constants.RequestIdKey))
 
 	if err != nil {
 		resp.BaseResp = pack.BuildBaseResp(err)

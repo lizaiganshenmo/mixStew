@@ -6,7 +6,7 @@ import (
 	"github.com/lizaiganshenmo/mixStew/library/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	gormopentracing "gorm.io/plugin/opentracing"
+	"gorm.io/plugin/opentelemetry/tracing"
 )
 
 var (
@@ -38,7 +38,7 @@ func initSQL(srvName string) {
 		panic(err)
 	}
 
-	if err = MySQLMixStewDB.Use(gormopentracing.New()); err != nil {
+	if err = MySQLMixStewDB.Use(tracing.NewPlugin()); err != nil {
 		panic(err)
 	}
 
