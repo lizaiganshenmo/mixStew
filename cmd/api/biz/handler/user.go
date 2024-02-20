@@ -9,8 +9,8 @@ import (
 	"github.com/lizaiganshenmo/mixStew/cmd/api/biz/rpc"
 	"github.com/lizaiganshenmo/mixStew/cmd/api/biz/types/req"
 	"github.com/lizaiganshenmo/mixStew/kitex_gen/user"
-	"github.com/lizaiganshenmo/mixStew/library/constants"
 	"github.com/lizaiganshenmo/mixStew/library/errno"
+	"github.com/lizaiganshenmo/mixStew/library/utils"
 )
 
 func RegisterUser(ctx context.Context, c *app.RequestContext) {
@@ -44,14 +44,7 @@ func RegisterUser(ctx context.Context, c *app.RequestContext) {
 }
 
 func GetUser(ctx context.Context, c *app.RequestContext) {
-	var uid int64
-	t, ok := c.Get(constants.IdentityKey)
-	if !ok {
-		SendResponse(c, errno.ParamErr, nil)
-		return
-	}
-
-	uid = int64(t.(float64))
+	uid := utils.GetUid(c)
 	user, err := rpc.GetUser(ctx, &user.GetUserReq{Uid: uid})
 	if err != nil {
 		SendResponse(c, err, nil)

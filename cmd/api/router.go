@@ -31,4 +31,17 @@ func customizedRegister(r *server.Hertz) {
 	profileGroup.DELETE("/:follow_uid/follow", handler.UnFollow)
 	profileGroup.GET("/:follow_uid", handler.GetProfile)
 
+	// article
+	articleGroup := r.Group("/articles")
+	articleGroup.GET("/list", handler.MGetArticle)
+	articleGroup.GET("/feed", handler.GetFeedArticle)
+	articleGroup.POST("/create", middleware.AuthMiddleware.MiddlewareFunc(), handler.CreateArticle)
+	articleGroup.POST("/update", middleware.AuthMiddleware.MiddlewareFunc(), handler.UpdateArticle)
+	articleGroup.POST("/delete", middleware.AuthMiddleware.MiddlewareFunc(), handler.DeleteArticle)
+	articleGroup.POST("/comments", middleware.AuthMiddleware.MiddlewareFunc(), handler.CommentArticle)
+	articleGroup.GET("/:article_id/comments", handler.GetArticleComment)
+	articleGroup.POST("/comments/delete", middleware.AuthMiddleware.MiddlewareFunc(), handler.DeleteArticleComment)
+	articleGroup.POST("/favorite", middleware.AuthMiddleware.MiddlewareFunc(), handler.FavoriteArticle)
+	articleGroup.POST("/unfavorite", middleware.AuthMiddleware.MiddlewareFunc(), handler.UnFavoriteArticle)
+
 }

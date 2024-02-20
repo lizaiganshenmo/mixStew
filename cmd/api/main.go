@@ -6,6 +6,7 @@ import (
 	"context"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
+	prometheus "github.com/hertz-contrib/monitor-prometheus"
 	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/lizaiganshenmo/mixStew/cmd/api/biz/rpc"
@@ -35,7 +36,14 @@ func main() {
 	defer p.Shutdown(context.Background())
 
 	tracer, cfg := hertztracing.NewServerTracer()
-	h := server.Default(tracer)
+	h := server.Default(
+		tracer,
+		server.WithTracer(
+			prometheus.NewServerTracer(":9091", "/hertz",
+				prometheus.WithEnableGoCollector(true), // enable go runtime metric collector
+			),
+		),
+	)
 	h.Use(hertztracing.ServerMiddleware(cfg))
 
 	register(h)

@@ -18,7 +18,7 @@ var (
 
 type Response struct {
 	Code    int64       `json:"code"`
-	Message string      `json:"message"`
+	Message string      `json:"msg"`
 	LogId   string      `json:"log_id"`
 	Data    interface{} `json:"data"`
 }
