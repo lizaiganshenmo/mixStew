@@ -10,12 +10,16 @@ const (
 	RequestIdKey = "log_id"
 
 	// jaeger collector add  -> accept OpenTelemetry Protocol (OTLP) over gRPC
-	JaegerColAdd = "127.0.0.1:4317"
-	JaegerAdd    = "127.0.0.1:6831"
+	JaegerColAdd = "123.56.67.72:4317"
+	JaegerAdd    = "123.56.67.72:6831"
 
 	// snowflake
-	SnowflakeWorkerID     = 0
-	SnowflakeDatacenterID = 0
+	SnowflakeWorkerID                = 0
+	SnowflakeDatacenterID            = 0
+	SnowflakeArticleWorkerID         = 1
+	SnowflakeArticleDatacenterID     = 1
+	SnowflakeInteractionWorkerID     = 2
+	SnowflakeInteractionDatacenterID = 2
 
 	// etcd add
 	EtcdAdd = "123.56.67.72:2379"
@@ -31,5 +35,10 @@ const (
 	FollowServiceName      = "followService"
 	FollowServiceListenADD = "127.0.0.1:8002"
 
-	MixStewServiceName = "mixStewService"
+	MixStewServiceName      = "mixStewService"
+	ArticleServiceName      = "articleService"
+	ArticleServiceListenADD = "127.0.0.1:8003"
+
+	InteractionServiceName      = "interactionService"
+	InteractionServiceListenADD = "127.0.0.1:8004"
 )

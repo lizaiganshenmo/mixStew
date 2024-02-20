@@ -1,0 +1,5 @@
+service_name = "rabbitmq_mixStew"
+[rabbitmq]
+addr = "123.56.67.72:5672"
+username = "admin"
+password = "admin"

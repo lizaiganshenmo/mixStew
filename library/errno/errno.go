@@ -12,9 +12,18 @@ const (
 	UserAlreadyExistErrCode    = 10003
 	AuthorizationFailedErrCode = 10004
 	UserNotExistErrCode        = 10005
+	UserNotLoginErrCode        = 10006
 
 	// follow
-	FollowYourselfErrorCode = 10006
+	FollowYourselfErrorCode = 11001
+
+	// article
+	ArticleFavoriteAlreadyExist    = 12001
+	ArticleFavoriteAlreadyNotExist = 12001
+
+	// interaction
+	SensitiveWordsErrCode  = 13001
+	CommentNotExistErrCode = 13002
 )
 
 type ErrNo struct {
@@ -42,9 +51,18 @@ var (
 	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User already exists")
 	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
 	UserNotExistErr        = NewErrNo(UserNotExistErrCode, "user not exit")
+	UserNotLoginErr        = NewErrNo(UserNotLoginErrCode, "user not login")
 
 	// follow
 	FollowYourselfError = NewErrNo(FollowYourselfErrorCode, "can not follow yourself")
+
+	// article
+	ArticleFavoriteAlreadyExistErr    = NewErrNo(ArticleFavoriteAlreadyExist, "already favority article")
+	ArticleFavoriteAlreadyNotExistErr = NewErrNo(ArticleFavoriteAlreadyNotExist, "already unfavority article")
+
+	// interaction
+	SensitiveWordsErr  = NewErrNo(SensitiveWordsErrCode, "existed sensitive words")
+	CommentNotExistErr = NewErrNo(CommentNotExistErrCode, "comment not existed")
 )
 
 // ConvertErr convert error to Errno

@@ -54,10 +54,10 @@ func (s *FollowServiceImpl) UnFollow(ctx context.Context, req *follow.FollowReq)
 // IsFollow implements the FollowServiceImpl interface.
 func (s *FollowServiceImpl) IsFollow(ctx context.Context, req *follow.FollowReq) (resp *follow.IsFollorResp, err error) {
 	resp = new(follow.IsFollorResp)
-	if req.Uid == 0 || req.FollowUid == 0 {
-		resp.BaseResp = pack.BuildBaseResp(errno.ParamErr)
-		return
-	}
+	// if req.Uid == 0 || req.FollowUid == 0 {
+	// 	resp.BaseResp = pack.BuildBaseResp(errno.ParamErr)
+	// 	return
+	// }
 
 	isFollow, err := service.NewFollowService(ctx).IsFollow(req)
 	if err != nil {

@@ -38,3 +38,20 @@ type EsConf struct {
 		Password string
 	}
 }
+
+type RedisConf struct {
+	ConfMeta
+	Redis struct {
+		Addr     string
+		Password string
+	}
+}
+
+type RabbitMQConf struct {
+	ConfMeta
+	RabbitMQ struct {
+		Addr     string
+		Username string
+		Password string
+	}
+}
